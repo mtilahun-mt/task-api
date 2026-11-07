@@ -1,7 +1,10 @@
+import { matchedData } from 'express-validator';
 import * as taskService from '../services/taskService.js';
 
 export async function getTasks(req, res, next) {
-  const tasks = await taskService.getAllTasks();
+  // matchedData returns the sanitized query values (completed is a real boolean here)
+  const { completed } = matchedData(req, { locations: ['query'] });
+  const tasks = await taskService.getAllTasks({ completed });
   res.json(tasks);
 }
 
